@@ -11,7 +11,6 @@ import {
 import { Button } from 'primeng/button';
 import { InputTextModule } from 'primeng/inputtext';
 import { TextareaModule } from 'primeng/textarea';
-import { Select } from 'primeng/select';
 
 @Component({
   selector: 'app-form-categoria',
@@ -24,7 +23,6 @@ import { Select } from 'primeng/select';
     Button,
     InputTextModule,
     TextareaModule,
-    Select,
     RouterLink,
 
   ],
