@@ -1,0 +1,19 @@
+<div class="grid h-screen w-full grid-cols-1 md:grid-cols-[280px_1fr] overflow-hidden">
+
+    <aside class="hidden md:flex flex-col h-full overflow-hidden
+    border-r-2 border-surface-400 ">
+        <app-sidebar></app-sidebar>
+    </aside>
+
+    <div class="flex flex-col min-w-0 h-full overflow-hidden">
+
+        <main class="flex-1 overflow-y-auto overflow-x-hidden p-6 lg:p-10 custom-scrollbar">
+            <div class="max-w-(--size-7xl) mx-auto w-full">
+
+                <router-outlet></router-outlet>
+
+            </div>
+        </main>
+
+    </div>
+</div>

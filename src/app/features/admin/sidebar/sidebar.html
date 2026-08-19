@@ -1,0 +1,18 @@
+<p-menu [model]="menuItems" class="flex flex-col h-full"
+    styleClass="!h-full !w-full !border-none !rounded-none flex flex-col">
+    <ng-template #start>
+        <span class="inline-flex items-center gap-1 px-5 py-5 mb-5">
+            <i class="pi pi-hammer" style="font-size: 2.5rem"></i>
+            <span class="text-xl font-semibold ms-3">FerreteSeba</span>
+        </span>
+    </ng-template>
+
+    <ng-template #item let-item>
+        <a pRipple class="flex items-center p-menu-item-link mb-1 pl-10" [routerLink]="item.routerLink">
+            <span [class]="item.icon"></span>
+            <span class="ml-2">{{ item.label }}</span>
+        </a>
+    </ng-template>
+    
+
+</p-menu>

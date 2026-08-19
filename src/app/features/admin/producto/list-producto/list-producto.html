@@ -1,0 +1,184 @@
+<div class="flex-1 overflow-y-auto p-4 md:p-8 scroll-smooth">
+
+  <div class="max-w-7xl mx-auto flex flex-col gap-6">
+
+    <!-- Header -->
+    <div class="flex flex-col md:flex-row md:items-end justify-between gap-4">
+
+      <div>
+
+        <h1 class="text-3xl font-bold text-slate-900">
+          Productos
+        </h1>
+
+        <p class="text-slate-600 mt-1">
+          Gestiona los productos del inventario.
+        </p>
+
+      </div>
+
+      <p-button
+        label="Nuevo Producto"
+        icon="pi pi-plus"
+        [raised]="true"
+        severity="primary"
+        [routerLink]="['/admin/form-producto']"
+      />
+
+    </div>
+
+    <!-- Buscador -->
+    <div
+      class="bg-surface-100 p-4 rounded-xl
+             border border-surface-300 shadow-sm"
+    >
+
+      <div class="relative max-w-md">
+
+        <i
+          class="pi pi-search absolute left-3 top-1/2
+                 -translate-y-1/2 text-slate-400"
+        ></i>
+
+        <input
+          pInputText
+          type="text"
+          [(ngModel)]="searchTerm"
+          (input)="filterProducts()"
+          placeholder="Buscar producto..."
+          class="w-full pl-10"
+        />
+
+      </div>
+
+    </div>
+
+    <!-- Tabla -->
+    <section
+      class="bg-surface-100 rounded-xl
+             border border-surface-300
+             shadow-sm overflow-hidden"
+    >
+
+      <p-table
+        [value]="filteredProducts"
+        [paginator]="true"
+        [rows]="10"
+        responsiveLayout="scroll"
+      >
+
+        <ng-template pTemplate="header">
+
+          <tr>
+
+            <th>ID</th>
+
+            <th>Producto</th>
+
+            <th>Marca</th>
+
+            <th>Categoría</th>
+
+            <th>Precio</th>
+
+            <th>Stock</th>
+
+            <th class="text-center">
+              Acciones
+            </th>
+
+          </tr>
+
+        </ng-template>
+
+        <ng-template pTemplate="body" let-product>
+
+          <tr>
+
+            <td>
+              {{ product.id }}
+            </td>
+
+            <td>
+              <span class="font-semibold text-slate-900">
+                {{ product.name }}
+              </span>
+            </td>
+
+            <td>
+              {{ product.brand }}
+            </td>
+
+            <td>
+              {{ product.category }}
+            </td>
+
+            <td>
+              ${{ product.price | number:'1.2-2' }}
+            </td>
+
+            <td>
+
+              <span
+                [class]="product.stock > 0
+                  ? 'text-green-600 font-semibold'
+                  : 'text-red-600 font-semibold'"
+              >
+                {{ product.stock }}
+              </span>
+
+            </td>
+
+            <td>
+
+              <div class="flex justify-center gap-2">
+
+                <p-button
+                  icon="pi pi-pencil"
+                  severity="secondary"
+                  [text]="true"
+                  [routerLink]="[
+                    '/admin/form-producto',
+                    product.id
+                  ]"
+                  pTooltip="Editar"
+                />
+
+                <p-button
+                  icon="pi pi-trash"
+                  severity="danger"
+                  [text]="true"
+                  (onClick)="deleteProduct(product.id)"
+                  pTooltip="Eliminar"
+                />
+
+              </div>
+
+            </td>
+
+          </tr>
+
+        </ng-template>
+
+        <ng-template pTemplate="emptymessage">
+
+          <tr>
+
+            <td
+              colspan="7"
+              class="text-center py-8 text-slate-500"
+            >
+              No se encontraron productos.
+            </td>
+
+          </tr>
+
+        </ng-template>
+
+      </p-table>
+
+    </section>
+
+  </div>
+
+</div>
