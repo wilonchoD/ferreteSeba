@@ -42,33 +42,36 @@ export class FormCategoria {
 
   showDebug: boolean = true;
 
-  form = {
-    name: '',
-    description: '',
-    parentCategoryId: null as number | null
-  };
+  form = this.fb.group({
+    name: ['', [
+      Validators.required,
+      Validators.minLength(3), 
+      Validators.maxLength(10)]],
+    description: ['', [
+      Validators.required,
+      Validators.minLength(3),
+      Validators.maxLength(10)
+    ]],
+    // parentCategoryId: [null]
+  });
 
   // Temporalmente usamos datos de prueba.
   // Después los reemplazamos por los datos de la API.
-  parentCategories = [
-    {
-      id: 1,
-      name: 'Living Room'
-    },
-    {
-      id: 2,
-      name: 'Comedor'
-    },
-    {
-      id: 3,
-      name: 'Dormitorio'
-    }
-  ];
+  // parentCategories = [
+  //   {
+  //     id: 1,
+  //     name: 'Living Room'
+  //   },
+  //   {
+  //     id: 2,
+  //     name: 'Comedor'
+  //   },
+  //   {
+  //     id: 3,
+  //     name: 'Dormitorio'
+  //   }
+  // ];
 
-  constructor(
-    private route: ActivatedRoute,
-    private router: Router
-  ) {}
 
   ngOnInit(): void {
 

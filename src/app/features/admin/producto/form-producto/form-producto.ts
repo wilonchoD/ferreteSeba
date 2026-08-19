@@ -1,36 +1,23 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, inject, OnInit } from '@angular/core';
 import { CommonModule } from '@angular/common';
-import { FormsModule } from '@angular/forms';
-
+import { FormBuilder, ReactiveFormsModule, Validators } from '@angular/forms';
 import {
   ActivatedRoute,
   Router,
   RouterLink
 } from '@angular/router';
-
 import { Button } from 'primeng/button';
 import { InputTextModule } from 'primeng/inputtext';
 import { TextareaModule } from 'primeng/textarea';
 import { Select } from 'primeng/select';
 import { InputNumberModule } from 'primeng/inputnumber';
 
-interface Brand {
-  id: number;
-  name: string;
-}
-
-interface Category {
-  id: number;
-  name: string;
-}
-
 @Component({
   selector: 'app-form-producto',
   standalone: true,
-
   imports: [
     CommonModule,
-    FormsModule,
+    ReactiveFormsModule,
     Button,
     InputTextModule,
     TextareaModule,
@@ -38,123 +25,114 @@ interface Category {
     InputNumberModule,
     RouterLink
   ],
-
   templateUrl: './form-producto.html',
   styles: ``
 })
 export class FormProducto implements OnInit {
+  private fb = inject(FormBuilder);
+  private route = inject(ActivatedRoute);
+  private router = inject(Router);
 
   isEditMode = false;
+  productoId: string | null = null;
+  showDebug = true;
 
-  productId: string | null = null;
+  form = this.fb.group({
+    name: ['', [
+      Validators.required,
+      Validators.minLength(3),
+      Validators.maxLength(100)
+    ]],
+    description: ['', [
+      Validators.required,
+      Validators.minLength(3),
+      Validators.maxLength(500)
+    ]],
+    price: [0, [
+      Validators.required,
+      Validators.min(0)
+    ]],
+    stock: [0, [
+      Validators.required,
+      Validators.min(0)
+    ]],
 
-  form = {
+    categoriaId: [null, [
+      Validators.required
+    ]],
 
-    name: '',
+    marcaId: [null, [
+      Validators.required
+    ]]
 
-    description: '',
+  });
 
-    price: 0,
 
-    stock: 0,
+  // Datos temporales.
+  // Después los reemplazamos por la API.
 
-    brandId: null as number | null,
-
-    categoryId: null as number | null
-
-  };
-
-  brands: Brand[] = [
-
-    {
-      id: 1,
-      name: 'Bosch'
-    },
-
-    {
-      id: 2,
-      name: 'Dewalt'
-    },
-
-    {
-      id: 3,
-      name: 'Makita'
-    }
-
-  ];
-
-  categories: Category[] = [
-
+  categorias = [
     {
       id: 1,
       name: 'Herramientas'
     },
-
     {
       id: 2,
-      name: 'Electricidad'
+      name: 'Materiales eléctricos'
     },
-
     {
       id: 3,
-      name: 'Construcción'
+      name: 'Plomería'
     }
-
   ];
 
-  constructor(
-    private route: ActivatedRoute,
-    private router: Router
-  ) {}
+
+  marcas = [
+    {
+      id: 1,
+      name: 'Bosch'
+    },
+    {
+      id: 2,
+      name: 'Dewalt'
+    },
+    {
+      id: 3,
+      name: 'Makita'
+    }
+  ];
+
 
   ngOnInit(): void {
 
-    this.productId =
+    this.productoId =
       this.route.snapshot.paramMap.get('id');
 
-    this.isEditMode =
-      !!this.productId;
+    this.isEditMode = !!this.productoId;
 
     if (this.isEditMode) {
 
-      // Después conectamos con Laravel.
-
-      // this.productService
-      //   .getById(this.productId!)
-      //   .subscribe(product => {
-      //
-      //     this.form = product;
-      //
-      //   });
+      // Después conectamos esto con tu API.
 
     }
   }
+
 
   onSave(): void {
 
-    console.log(
-      'Datos del producto:',
-      this.form
-    );
+    if (this.form.invalid) {
 
-    if (this.isEditMode) {
+      this.form.markAllAsTouched();
 
-      console.log(
-        'Actualizando producto:',
-        this.productId
-      );
-
-    } else {
-
-      console.log(
-        'Creando producto:',
-        this.form
-      );
-
+      return;
     }
 
-    this.router.navigate([
-      '/admin/lista-productos'
-    ]);
+    console.log(
+      'Datos del producto:',
+      this.form.value
+    );
+
+    this.router.navigate(['/admin/lista-productos']);
   }
+
 }
