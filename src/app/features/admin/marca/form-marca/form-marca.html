@@ -18,13 +18,13 @@
 
       <div class="flex gap-4">
         <p-button label="Cancelar" [raised]="true" severity="secondary" [routerLink]="['/admin/lista-marcas']" />
-        <p-button label="Guardar Marca" [raised]="true" severity="primary" icon="pi pi-save" [disabled]="form.invalid"
-          (onClick)="onSave()" />
+        <p-button label="Guardar Marca" [raised]="true" severity="primary" icon="pi pi-save" [disabled]="formMarca.invalid"
+          (onClick)="guardarMarca()" />
       </div>
     </div>
 
     <!-- Formulario -->
-    <form [formGroup]="form" class="grid grid-cols-1 gap-5">
+    <form [formGroup]="formMarca" class="grid grid-cols-1 gap-5">
       <!-- Información general -->
       <section class="bg-surface-100 p-6 rounded-xl
                border border-surface-300 shadow-sm">
@@ -34,6 +34,7 @@
         </h3>
 
 
+
         <div class="grid grid-cols-1 gap-4">
           <!-- Nombre -->
           <div>
@@ -41,48 +42,30 @@
               Nombre de la Marca
             </label>
 
-            <input pInputText type="text" formControlName="name" placeholder="Ej: Bosch, Dewalt, Makita"
+            <input pInputText type="text" formControlName="nombre" placeholder="Ej: Bosch, Dewalt, Makita"
               class="w-full" />
             @if (
-            form.get('name')?.invalid &&
-            form.get('name')?.touched
+            formMarca.get('nombre')?.invalid &&
+            formMarca.get('nombre')?.touched
             ) {
             <small class="text-red-600">
               El nombre de la marca debe tener entre 3 y 50 caracteres.
             </small>
             }
-          </div>
 
-          <!-- Descripción -->
-          <div>
-            <label class="block text-sm font-medium text-gray-600 mb-1">
-              Descripción
-            </label>
-
-            <textarea pTextarea formControlName="description" rows="5" class="w-full"
-              placeholder="Describe la marca"></textarea>
-            @if (
-            form.get('description')?.invalid &&
-            form.get('description')?.touched
-            ) {
-            <small class="text-red-600">
-              La descripción debe tener entre 3 y 150 caracteres.
-            </small>
-            }
           </div>
-        </div>
+          </div>
       </section>
     </form>
-
+  
     <!-- Debug -->
 
     @if (showDebug) {
     <div class="mt-6 p-4 bg-surface-100 rounded-lg text-xs">
-      <pre>{{ form.value | json }}</pre>
-      <pre>
-Formulario es Valido: {{ form.valid | json }}
-        </pre>
+      <pre>{{ formMarca.value | json }}</pre>
+      <pre>Formulario es Valido: {{ formMarca.valid | json }}</pre>
     </div>
     }
+
   </div>
 </div>

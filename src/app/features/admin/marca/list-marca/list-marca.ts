@@ -1,98 +1,43 @@
-import { Component, OnInit } from '@angular/core';
-import { CommonModule } from '@angular/common';
-import { FormsModule } from '@angular/forms';
-import { RouterLink } from '@angular/router';
-
-import { Button } from 'primeng/button';
+import { Component, inject, signal } from '@angular/core';
+import { Router, RouterLink } from '@angular/router';
+import { ButtonModule } from 'primeng/button';
+import { SkeletonModule } from 'primeng/skeleton';
 import { TableModule } from 'primeng/table';
-import { InputTextModule } from 'primeng/inputtext';
-import { TooltipModule } from 'primeng/tooltip';
+import { TagModule } from 'primeng/tag';
+import { FiltroMarcas } from '../filtro-marca/filtro-marca';
+import { MarcasService } from '../../../admin/marca/marca.service';
+import { Marcas } from '../../../../core/models/marca.model';
 
-interface Brand {
-  id: number;
-  name: string;
-  description: string;
-}
+
 
 @Component({
   selector: 'app-lista-marcas',
-  standalone: true,
-
-  imports: [
-    CommonModule,
-    FormsModule,
-    RouterLink,
-    Button,
-    TableModule,
-    InputTextModule,
-    TooltipModule
-  ],
-
+  imports: [ButtonModule, TableModule, SkeletonModule, TagModule, FiltroMarcas, RouterLink],
   templateUrl: './list-marca.html',
-  styles: ``
+  styles: ``,
 })
-export class ListaMarcas implements OnInit {
+export class ListaMarcas {
+  private marcasService = inject(MarcasService);
+  private router = inject(Router);
 
-  brands: Brand[] = [];
-
-  filteredBrands: Brand[] = [];
-
-  searchTerm = '';
+  protected marcas= signal<Marcas[]>([]);
 
   ngOnInit(): void {
+    this.obtenerMarcas();
+  }
 
-    this.brands = [
-      {
-        id: 1,
-        name: 'Bosch',
-        description: 'Herramientas eléctricas y accesorios'
-      },
-      {
-        id: 2,
-        name: 'Dewalt',
-        description: 'Herramientas profesionales'
-      },
-      {
-        id: 3,
-        name: 'Makita',
-        description: 'Herramientas eléctricas'
+  obtenerMarcas():void {
+    this.marcasService.obtenerMarcas().subscribe(
+      (data) => {
+        console.log(data);
+        this.marcas.set(data);
       }
-    ];
-
-    this.filteredBrands = [...this.brands];
+    )
   }
 
-  filterBrands(): void {
-
-    const search = this.searchTerm
-      .toLowerCase()
-      .trim();
-
-    if (!search) {
-      this.filteredBrands = [...this.brands];
-      return;
-    }
-
-    this.filteredBrands = this.brands.filter(brand =>
-      brand.name.toLowerCase().includes(search) ||
-      brand.description.toLowerCase().includes(search)
-    );
+  editarMarcas(marcas: Marcas) {
+    this.marcasService.setMarcaEditar(marcas);
+    this.router.navigate(['/admin/form-marca']);
   }
 
-  deleteBrand(id: number): void {
-
-    const confirmed = confirm(
-      '¿Estás seguro de que deseas eliminar esta marca?'
-    );
-
-    if (!confirmed) {
-      return;
-    }
-
-    this.brands = this.brands.filter(
-      brand => brand.id !== id
-    );
-
-    this.filterBrands();
-  }
 }
