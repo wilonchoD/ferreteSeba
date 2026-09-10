@@ -18,12 +18,13 @@
       <div class="flex gap-4">
         <p-button label="Cancelar" [raised]="true" severity="secondary" [routerLink]="['/admin/list-categorias']" />
 
-        <p-button label="Guardar Categoría" [raised]="true" severity="primary" icon="pi pi-save" (onClick)="onSave()" />
+        <p-button label="Guardar Categoría" [raised]="true" severity="primary" icon="pi pi-save"
+          (onClick)="guardarCategoria()" />
       </div>
     </div>
 
     <!-- Formulario -->
-    <form [formGroup]="form" class="grid grid-cols-1 gap-5 lg:grid-cols-3">
+    <form [formGroup]="formCategoria" class="grid grid-cols-1 gap-5 lg:grid-cols-3">
 
       <!-- Información general -->
       <section class="lg:col-span-2 bg-surface-100 p-6 rounded-xl
@@ -42,12 +43,12 @@
               Nombre de la Categoría
             </label>
 
-            <input pInputText type="text" formControlName="name" placeholder="Ej: Sillas, Mesas, Herramientas"
+            <input pInputText type="text" formControlName="nombre" placeholder="Ej: Sillas, Mesas, Herramientas"
               class="w-full" />
 
             @if (
-            form.get('name')?.invalid &&
-            form.get('name')?.touched
+            formCategoria.get('nombre')?.invalid &&
+            formCategoria.get('nombre')?.touched
             ) {
             <small class="text-red-600">
               El nombre de la categoría debe tener entre 3 y 10 caracteres.
@@ -61,12 +62,12 @@
               Descripción
             </label>
 
-            <textarea pTextarea formControlName="description" rows="5" class="w-full"
+            <textarea pTextarea formControlName="descripcion" rows="5" class="w-full"
               placeholder="Describe qué productos pertenecen a esta categoría"></textarea>
 
             @if (
-            form.get('description')?.invalid &&
-            form.get('description')?.touched
+            formCategoria.get('descripcion')?.invalid &&
+            formCategoria.get('descripcion')?.touched
             ) {
             <small class="text-red-600">
               La descripción debe tener entre 3 y 10 caracteres.
@@ -77,42 +78,33 @@
         </div>
       </section>
 
-      <!-- Organización
+      <!-- Organización -->
       <section class="bg-surface-100 p-6 rounded-xl
                border border-surface-300 shadow-sm">
 
         <h3 class="text-lg font-bold mb-4">
           <span class="pi pi-sitemap text-blue-600 mr-1"></span>
-          Organización
+          Asignar categoría padre
         </h3>
 
         <div class="grid grid-cols-1 gap-4">
 
           <div>
-            <label class="block text-sm font-medium text-gray-600 mb-1">
-              Categoría Padre
-            </label> -->
 
-            <!-- <p-select
-              [options]="parentCategories"
-              [(ngModel)]="form.parentCategoryId"
-              optionLabel="name"
-              optionValue="id"
-              placeholder="Selecciona una categoría"
-              class="w-full"
-              appendTo="body"
-            /> -->
+            <p-select [options]="categoriaPadreOptions" [(ngModel)]="formCategoria.value.categoria_id"
+              optionLabel="name" optionValue="name" placeholder="Selecciona una categoría" class="w-full"
+              appendTo="body" />
 
-          <!-- </div>
+          </div>
 
         </div>
-      </section> -->
+      </section>
     </form>
 
     @if (showDebug) {
     <div class="mt-6 p-4 bg-surface-100 rounded-lg text-xs">
-      <pre>{{ form.value | json }}</pre>
-      <pre>Formulario es Valido: {{ form.valid | json }}</pre>
+      <pre>{{ formCategoria.value | json }}</pre>
+      <pre>Formulario es Valido: {{ formCategoria.valid | json }}</pre>
     </div>
     }
 

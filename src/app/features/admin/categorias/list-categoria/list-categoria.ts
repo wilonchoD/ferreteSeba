@@ -1,46 +1,43 @@
-import { Component } from '@angular/core';
-import { RouterLink } from '@angular/router';
+import { Component, inject, signal } from '@angular/core';
+import { Router, RouterLink } from '@angular/router';
 import { ButtonModule } from 'primeng/button';
 import { SkeletonModule } from 'primeng/skeleton';
 import { TableModule } from 'primeng/table';
 import { TagModule } from 'primeng/tag';
-import { FiltroCategorias } from './filtro-categorias/filtro-categorias'; 
+import { FiltroCategorias } from './filtro-categorias/filtro-categorias';
+import { CategoriasService } from '../categorias.service';
+import { Categoria } from '../../../../core/models/categoria.model';
 
-export interface Categoria {
-  Nombre: string;
-  Descripcion: string;
-  Productos: number;
-}
+
 
 @Component({
   selector: 'app-lista-categorias',
-  imports: [ButtonModule, TableModule, SkeletonModule, TagModule, RouterLink, FiltroCategorias],
+  imports: [ButtonModule, TableModule, SkeletonModule, TagModule, FiltroCategorias, RouterLink],
   templateUrl: './list-categoria.html',
   styles: ``,
 })
 export class ListaCategorias {
-  categorias: Categoria[] =
-    [
-      {
-        "Nombre": "Procesador (CPU)",
-        "Descripcion": "Unidad Central de Procesamiento (CPU)",
-        "Productos": 12,
-      },
-      {
-        "Nombre": "Almacenamiento",
-        "Descripcion": "SSD, HDD y NVMe M.2",
-        "Productos": 20,
-      },
-      {
-        "Nombre": "Placa Madre (Motherboard)",
-        "Descripcion": "ATX, Micro-ATX y Mini-ITX",
-        "Productos": 8,
-      },
-      {
-        "Nombre": "Memoria RAM",
-        "Descripcion": "DDR4, DDR5 y SO-DIMM",
-        "Productos": 15,
-      },
+  private categoriasService = inject(CategoriasService);
+  private router = inject(Router);
 
-    ];
+  protected categorias= signal<Categoria[]>([]);
+
+  ngOnInit(): void {
+    this.obtenerCategorias();
+  }
+
+  obtenerCategorias():void {
+    this.categoriasService.obtenerCategorias().subscribe(
+      (data) => {
+        console.log(data);
+        this.categorias.set(data);
+      }
+    )
+  }
+
+  editarCategoria(categoria: Categoria) {
+    this.categoriasService.setCategoriaEditar(categoria);
+    this.router.navigate(['/admin/form-categoria']);
+  }
+
 }

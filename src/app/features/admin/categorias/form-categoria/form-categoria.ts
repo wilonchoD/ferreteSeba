@@ -1,4 +1,4 @@
-import { Component, inject} from '@angular/core';
+import { Component, inject, OnInit } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
 import { FormBuilder, ReactiveFormsModule, Validators } from '@angular/forms';
@@ -11,6 +11,8 @@ import {
 import { Button } from 'primeng/button';
 import { InputTextModule } from 'primeng/inputtext';
 import { TextareaModule } from 'primeng/textarea';
+import { CategoriasService } from '../categorias.service';
+import { SelectModule } from 'primeng/select';
 
 @Component({
   selector: 'app-form-categoria',
@@ -24,6 +26,7 @@ import { TextareaModule } from 'primeng/textarea';
     InputTextModule,
     TextareaModule,
     RouterLink,
+    SelectModule,
 
   ],
 
@@ -34,65 +37,64 @@ export class FormCategoria {
   private fb = inject(FormBuilder);
   private route = inject(ActivatedRoute);
   private router = inject(Router);
+  private categoriaService = inject(CategoriasService);
 
   isEditMode = false;
   categoryId: string | null = null;
 
   showDebug: boolean = true;
 
-  form = this.fb.group({
-    name: ['', [
+  formCategoria = this.fb.group({
+    nombre: ['', [
       Validators.required,
-      Validators.minLength(3), 
+      Validators.minLength(3),
       Validators.maxLength(10)]],
-    description: ['', [
-      Validators.required,
+    descripcion: ['', [
       Validators.minLength(3),
       Validators.maxLength(10)
     ]],
-    // parentCategoryId: [null]
+    categoria_id: [null]
   });
 
-  // Temporalmente usamos datos de prueba.
-  // Después los reemplazamos por los datos de la API.
-  // parentCategories = [
-  //   {
-  //     id: 1,
-  //     name: 'Living Room'
-  //   },
-  //   {
-  //     id: 2,
-  //     name: 'Comedor'
-  //   },
-  //   {
-  //     id: 3,
-  //     name: 'Dormitorio'
-  //   }
-  // ];
+  categoriaPadreOptions = [
+    
+  ];
 
 
-  ngOnInit(): void {
 
-    this.categoryId =
-      this.route.snapshot.paramMap.get('id');
 
-    this.isEditMode = !!this.categoryId;
+  guardarCategoria() {
+    if (!this.formCategoria.invalid) {
+      const categoria: any = this.formCategoria.value;
 
-    if (this.isEditMode) {
+      this.categoriaService.guardarCategoria(categoria).subscribe(
+        (data) => {
+          alert('Categoría guardada con éxito');
+          this.formCategoria.reset();
 
-      // Después conectamos esto con tu API.
-      //
-      // this.categoryService
-      //   .getById(this.categoryId!)
-      //   .subscribe(category => {
-      //     this.form = category;
-      //   });
 
+        }
+      )
     }
   }
+  // ngOnInit(): void {
 
-  onSave(): void {
+  //   this.categoryId =
+  //     this.route.snapshot.paramMap.get('id');
 
-  this.router.navigate(['/admin/list-categorias']);
-  }
+  //   this.isEditMode = !!this.categoryId;
+
+  //   if (this.isEditMode) {
+
+
+
+  //     this.categoriaService
+  //       .obtenerCategoriaPorId(this.categoryId!)
+  //       .subscribe(category => {
+  //         this.formCategoria.patchValue(category);
+  //       });
+
+  //   }
+  // }
+
 }
