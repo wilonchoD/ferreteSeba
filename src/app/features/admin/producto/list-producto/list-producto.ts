@@ -2,32 +2,23 @@ import { Component, OnInit } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
 import { RouterLink } from '@angular/router';
-
 import { Button } from 'primeng/button';
 import { TableModule } from 'primeng/table';
 import { InputTextModule } from 'primeng/inputtext';
 import { TooltipModule } from 'primeng/tooltip';
 
 interface Product {
-
   id: number;
-
   name: string;
-
   brand: string;
-
   category: string;
-
   price: number;
-
   stock: number;
-
 }
 
 @Component({
   selector: 'app-lista-productos',
   standalone: true,
-
   imports: [
     CommonModule,
     FormsModule,

@@ -4,7 +4,7 @@ import { ButtonModule } from 'primeng/button';
 import { SkeletonModule } from 'primeng/skeleton';
 import { TableModule } from 'primeng/table';
 import { TagModule } from 'primeng/tag';
-import { FiltroMarcas } from '../filtro-marca/filtro-marca';
+import { FiltroMarcas } from './filtro-marca/filtro-marca';
 import { MarcasService } from '../../../admin/marca/marca.service';
 import { Marcas } from '../../../../core/models/marca.model';
 
