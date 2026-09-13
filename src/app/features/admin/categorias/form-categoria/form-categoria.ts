@@ -40,7 +40,7 @@ export class FormCategoria {
   private categoriaService = inject(CategoriasService);
 
   isEditMode = false;
-  categoryId: string | null = null;
+  categoriaId: string | null = null;
 
   showDebug: boolean = true;
 
@@ -53,14 +53,20 @@ export class FormCategoria {
       Validators.minLength(3),
       Validators.maxLength(10)
     ]],
-    categoria_id: [null]
+    categoria_id: [null as number | null]
   });
 
   categoriaPadreOptions = [
-    
+
   ];
 
-
+  cargarCategorias() {
+    this.categoriaService.obtenerCategorias().subscribe(
+      (categorias) => {
+        this.categoriaPadreOptions = categorias;
+      }
+    );
+  }
 
 
   guardarCategoria() {
@@ -77,24 +83,25 @@ export class FormCategoria {
       )
     }
   }
-  // ngOnInit(): void {
+  ngOnInit(): void {
 
-  //   this.categoryId =
-  //     this.route.snapshot.paramMap.get('id');
+    this.categoriaId =
+      this.route.snapshot.paramMap.get('id');
 
-  //   this.isEditMode = !!this.categoryId;
+    this.isEditMode = !!this.categoriaId;
 
-  //   if (this.isEditMode) {
+    this.cargarCategorias();
+    if (this.isEditMode) {
 
 
 
-  //     this.categoriaService
-  //       .obtenerCategoriaPorId(this.categoryId!)
-  //       .subscribe(category => {
-  //         this.formCategoria.patchValue(category);
-  //       });
+      this.categoriaService
+        .obtenerCategoriaPorId(Number(this.categoriaId!))
+        .subscribe(categoria => {
+          this.formCategoria.patchValue(categoria);
+        });
 
-  //   }
-  // }
+    }
+  }
 
 }

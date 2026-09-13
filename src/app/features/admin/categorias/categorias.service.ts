@@ -1,6 +1,7 @@
 import { HttpClient } from '@angular/common/http';
 import { inject, Injectable, signal } from '@angular/core';
 import { Categoria } from '../../../core/models/categoria.model';
+import { Observable } from 'rxjs';
 
 
 
@@ -26,6 +27,10 @@ export class CategoriasService {
 
   guardarCategoria(categoria: Categoria) {
     return this.httpClient.post<any>(this.apiURL, categoria);
+  }
+
+  obtenerCategoriaPorId(id: number): Observable<Categoria> {
+    return this.httpClient.get<Categoria>(`${this.apiURL}/${id}`);
   }
 
 
