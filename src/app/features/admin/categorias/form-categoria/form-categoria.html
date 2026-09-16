@@ -4,22 +4,14 @@
     <!-- Header -->
     <div class="flex flex-col md:flex-row md:items-end justify-between gap-3">
       <div>
-        <h1 class="text-3xl font-bold text-slate-900">
-          {{ isEditMode ? 'Editar categoría' : 'Crear nueva categoría' }}
-        </h1>
-
-        <p class="text-slate-600">
-          {{ isEditMode
-          ? 'Modifica los datos de la categoría seleccionada.'
-          : 'Agrega una nueva categoría de productos al inventario.' }}
-        </p>
+        <h1 class="text-3xl font-bold text-slate-900">Crear nueva categoria</h1>
+        <p class="text-slate-600">Agrega nuevas categorias de productos al inventario</p>
       </div>
-
       <div class="flex gap-4">
-        <p-button label="Cancelar" [raised]="true" severity="secondary" [routerLink]="['/admin/list-categorias']" />
-
-        <p-button label="Guardar Categoría" [raised]="true" severity="primary" icon="pi pi-save"
+        <p-button label="Cancelar" [raised]="true" severity="secondary" [routerLink]="['/admin/list-productos']" />
+        <p-button label="Guardar Categoria" [raised]="true" severity="primary" icon="pi pi-save"
           (onClick)="guardarCategoria()" />
+
       </div>
     </div>
 
@@ -43,7 +35,7 @@
               Nombre de la Categoría
             </label>
 
-            <input pInputText type="text" formControlName="nombre" placeholder="Ej: Sillas, Mesas, Herramientas"
+            <input pInputText type="text" formControlName="nombre" placeholder="Ej: percutor, contundente, punzante"
               class="w-full" />
 
             @if (
@@ -56,24 +48,6 @@
             }
           </div>
 
-          <!-- Descripción -->
-          <div>
-            <label class="block text-sm font-medium text-gray-600 mb-1">
-              Descripción
-            </label>
-
-            <textarea pTextarea formControlName="descripcion" rows="5" class="w-full"
-              placeholder="Describe qué productos pertenecen a esta categoría"></textarea>
-
-            @if (
-            formCategoria.get('descripcion')?.invalid &&
-            formCategoria.get('descripcion')?.touched
-            ) {
-            <small class="text-red-600">
-              La descripción debe tener entre 3 y 10 caracteres.
-            </small>
-            }
-          </div>
 
         </div>
       </section>
@@ -87,17 +61,16 @@
           Asignar categoría padre
         </h3>
 
-        <div class="grid grid-cols-1 gap-4">
+          <div class="grid lg:grid-cols-1 sm:grid-cols-2 gap-4">
+            <div>
+              <label class="block text-sm font-medium text-gray-600 mb-1">Categoria Padre</label>
+              <p-select [options]="categoriasPadre()" optionLabel="nombre" optionValue="id"
+                placeholder="Selecciona un categoria" class="w-full" appendTo="body" formControlName="parent_id"
+                [showClear]="true" />
 
-          <div>
 
-            <p-select [options]="categoriaPadreOptions" formControlName="categoria_id"
-              optionLabel="nombre" optionValue="id" placeholder="Selecciona una categoría" class="w-full"
-              appendTo="body" />
-
+            </div>
           </div>
-
-        </div>
       </section>
     </form>
 

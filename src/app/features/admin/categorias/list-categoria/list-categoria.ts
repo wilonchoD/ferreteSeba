@@ -7,12 +7,18 @@ import { TagModule } from 'primeng/tag';
 import { FiltroCategorias } from './filtro-categorias/filtro-categorias';
 import { CategoriasService } from '../categorias.service';
 import { Categoria } from '../../../../core/models/categoria.model';
+import { ConfirmationService, MessageService } from 'primeng/api';
+import { ConfirmDialogModule } from 'primeng/confirmdialog';
 
 
 
 @Component({
   selector: 'app-lista-categorias',
-  imports: [ButtonModule, TableModule, SkeletonModule, TagModule, FiltroCategorias, RouterLink],
+  imports: [ButtonModule, TableModule, SkeletonModule, TagModule, FiltroCategorias, ConfirmDialogModule],
+  providers: [
+    ConfirmationService,
+    MessageService
+  ],
   templateUrl: './list-categoria.html',
   styles: ``,
 })
@@ -20,16 +26,19 @@ export class ListaCategorias {
   private categoriasService = inject(CategoriasService);
   private router = inject(Router);
 
-  protected categorias= signal<Categoria[]>([]);
+  private confirmationService = inject(ConfirmationService);
+  private toastService = inject(MessageService);
 
-  ngOnInit(): void {
+  protected categorias = signal<Categoria[]>([]);
+
+  ngOnInit() {
     this.obtenerCategorias();
   }
 
-  obtenerCategorias():void {
+  obtenerCategorias() {
     this.categoriasService.obtenerCategorias().subscribe(
       (data) => {
-        console.log(data);
+
         this.categorias.set(data);
       }
     )
@@ -40,4 +49,24 @@ export class ListaCategorias {
     this.router.navigate(['/admin/form-categoria']);
   }
 
+  nuevaCategoria() {
+    this.categoriasService.setCategoriaEditar(null);
+    this.router.navigate(['/admin/form-categoria']);
+  }
+
+  eliminarCategoria(categoria_id: number) {
+    this.confirmationService.confirm({
+      message: '¿Estás seguro de eliminar la categoria?',
+      header: 'Confirmación',
+      icon: 'pi pi-exclamation-triangle',
+      accept: () => {
+        this.categoriasService.eliminarCategoria(categoria_id).subscribe(
+          (data) => {
+            this.obtenerCategorias();
+            this.toastService.add({ severity: 'success', summary: 'Categoria eliminada' });
+          }
+        )
+      }
+    });
+  }
 }

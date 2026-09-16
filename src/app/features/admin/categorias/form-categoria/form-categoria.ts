@@ -1,18 +1,15 @@
-import { Component, inject, OnInit } from '@angular/core';
+import { Component, inject, OnInit, signal } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
 import { FormBuilder, ReactiveFormsModule, Validators } from '@angular/forms';
-import {
-  ActivatedRoute,
-  Router,
-  RouterLink
-} from '@angular/router';
-
+import { ActivatedRoute, Router, RouterLink } from '@angular/router';
 import { Button } from 'primeng/button';
 import { InputTextModule } from 'primeng/inputtext';
 import { TextareaModule } from 'primeng/textarea';
 import { CategoriasService } from '../categorias.service';
+import { Categoria } from '../../../../core/models/categoria.model';
 import { SelectModule } from 'primeng/select';
+import { MessageService } from 'primeng/api';
 
 @Component({
   selector: 'app-form-categoria',
@@ -29,18 +26,22 @@ import { SelectModule } from 'primeng/select';
     SelectModule,
 
   ],
+  providers:[
+    MessageService,
+    
+  ],
 
   templateUrl: './form-categoria.html',
   styles: ``
 })
 export class FormCategoria {
   private fb = inject(FormBuilder);
-  private route = inject(ActivatedRoute);
   private router = inject(Router);
   private categoriaService = inject(CategoriasService);
+  private toastService = inject(MessageService);
 
-  isEditMode = false;
-  categoriaId: string | null = null;
+  protected categoriasPadre = signal<Categoria[]>([]);
+
 
   showDebug: boolean = true;
 
@@ -49,59 +50,65 @@ export class FormCategoria {
       Validators.required,
       Validators.minLength(3),
       Validators.maxLength(10)]],
-    descripcion: ['', [
-      Validators.minLength(3),
-      Validators.maxLength(10)
-    ]],
-    categoria_id: [null as number | null]
+    parent_id: [null as number | null]
   });
 
-  categoriaPadreOptions = [
 
-  ];
 
-  cargarCategorias() {
-    this.categoriaService.obtenerCategorias().subscribe(
-      (categorias) => {
-        this.categoriaPadreOptions = categorias;
-      }
-    );
+
+
+  ngOnInit() {
+    this.obtenerCategoriasPadre();
+
+    if (this.categoriaService.categoriaEditar() != null) {
+      this.formCategoria.patchValue({
+        nombre: this.categoriaService.categoriaEditar()?.nombre,
+        parent_id: this.categoriaService.categoriaEditar()?.parent_id!
+      })
+    } else {
+      this.formCategoria.reset();
+    }
   }
 
+  obtenerCategoriasPadre() {
+    this.categoriaService.obtenerCategoriasParaParents().subscribe(
+      (data) => {
+        this.categoriasPadre.set(data);
+      }
+    )
+  }
 
   guardarCategoria() {
     if (!this.formCategoria.invalid) {
-      const categoria: any = this.formCategoria.value;
-
-      this.categoriaService.guardarCategoria(categoria).subscribe(
-        (data) => {
-          alert('Categoría guardada con éxito');
-          this.formCategoria.reset();
+      let categoria: Categoria = {
+        nombre: this.formCategoria.value.nombre!,
+        parent_id: this.formCategoria.value.parent_id ? Number(this.formCategoria.value.parent_id) : null
+      }
 
 
-        }
-      )
+
+      if (this.categoriaService.categoriaEditar() == null) {
+        this.categoriaService.guardarCategoria(categoria).subscribe(
+          (data) => {
+            this.toastService.add({ severity: 'success', summary: data.message });
+            this.finalizarGuardado();
+          }
+        )
+      } else {
+
+        this.categoriaService.actualizarCategoria(categoria, this.categoriaService.categoriaEditar()?.id!).subscribe(
+          (data) => {
+            this.toastService.add({ severity: 'success', summary: data.message });
+            this.finalizarGuardado();
+          }
+        )
+      }
     }
   }
-  ngOnInit(): void {
 
-    this.categoriaId =
-      this.route.snapshot.paramMap.get('id');
-
-    this.isEditMode = !!this.categoriaId;
-
-    this.cargarCategorias();
-    if (this.isEditMode) {
-
-
-
-      this.categoriaService
-        .obtenerCategoriaPorId(Number(this.categoriaId!))
-        .subscribe(categoria => {
-          this.formCategoria.patchValue(categoria);
-        });
-
-    }
+  finalizarGuardado() {
+    this.formCategoria.reset();
+    this.router.navigate(['/admin/lista-categoria'])
   }
 
 }

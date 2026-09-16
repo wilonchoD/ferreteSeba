@@ -1,7 +1,7 @@
 import { HttpClient } from '@angular/common/http';
 import { inject, Injectable, signal } from '@angular/core';
 import { Categoria } from '../../../core/models/categoria.model';
-import { Observable } from 'rxjs';
+
 
 
 
@@ -16,7 +16,7 @@ export class CategoriasService {
   private _categoria_editar = signal<Categoria | null>(null);
   categoriaEditar = this._categoria_editar.asReadonly();
 
-  setCategoriaEditar(categoria: Categoria) {
+  setCategoriaEditar(categoria: Categoria | null) {
     this._categoria_editar.set(categoria);
   }
 
@@ -25,12 +25,20 @@ export class CategoriasService {
     return this.httpClient.get<any>(this.apiURL);
   }
 
+  obtenerCategoriasParaParents() {
+    return this.httpClient.get<any>(`${this.apiURL}/padre`)
+  }
+
   guardarCategoria(categoria: Categoria) {
     return this.httpClient.post<any>(this.apiURL, categoria);
   }
 
-  obtenerCategoriaPorId(id: number): Observable<Categoria> {
-    return this.httpClient.get<Categoria>(`${this.apiURL}/${id}`);
+  actualizarCategoria(categoria: Categoria, id_categoria: number){
+    return this.httpClient.put<any>(`${this.apiURL}/${id_categoria}`, categoria);
+  }
+
+  eliminarCategoria(id_categoria: number){
+    return this.httpClient.delete<any>(`${this.apiURL}/${id_categoria}`)
   }
 
 
