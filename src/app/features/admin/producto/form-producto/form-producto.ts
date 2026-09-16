@@ -1,138 +1,143 @@
 import { Component, inject, OnInit } from '@angular/core';
 import { CommonModule } from '@angular/common';
+import { FormsModule, RequiredValidator } from '@angular/forms';
 import { FormBuilder, ReactiveFormsModule, Validators } from '@angular/forms';
 import {
   ActivatedRoute,
   Router,
   RouterLink
 } from '@angular/router';
+
 import { Button } from 'primeng/button';
 import { InputTextModule } from 'primeng/inputtext';
 import { TextareaModule } from 'primeng/textarea';
-import { Select } from 'primeng/select';
-import { InputNumberModule } from 'primeng/inputnumber';
+import { ProductosService } from '../producto.service';
+import { CategoriasService } from '../../categorias/categorias.service';
+import { MarcasService } from '../../marca/marca.service';
+import { SelectModule } from 'primeng/select';
 
 @Component({
-  selector: 'app-form-producto',
+  selector: 'app-form-productos',
   standalone: true,
+
   imports: [
     CommonModule,
+    FormsModule,
     ReactiveFormsModule,
     Button,
     InputTextModule,
     TextareaModule,
-    Select,
-    InputNumberModule,
-    RouterLink
+    RouterLink,
+    SelectModule,
+
   ],
+
   templateUrl: './form-producto.html',
   styles: ``
 })
-export class FormProducto implements OnInit {
+export class FormProducto {
   private fb = inject(FormBuilder);
   private route = inject(ActivatedRoute);
   private router = inject(Router);
+  private productosService = inject(ProductosService);
+  private categoriasService = inject(CategoriasService)
+  private marcasService = inject(MarcasService)
 
   isEditMode = false;
   productoId: string | null = null;
-  showDebug = true;
 
-  form = this.fb.group({
-    name: ['', [
+  showDebug: boolean = true;
+
+  formProducto = this.fb.group({
+    nombre: ['', [
       Validators.required,
+      Validators.minLength(3),
+      Validators.maxLength(10)]],
+
+    codigo: [null as number | null, [
+      Validators.required
+    ]],
+
+    modelo: ['',[
+      Validators.required,
+      Validators.minLength(2),
+      Validators.maxLength(15)
+    ]],
+
+    color: ['',[
+      Validators.required,
+      Validators.minLength(2),
+      Validators.maxLength(10)
+    ]],
+
+    descripcion: ['', [
       Validators.minLength(3),
       Validators.maxLength(100)
     ]],
-    description: ['', [
+
+    precio: [null as number | null, [
       Validators.required,
-      Validators.minLength(3),
-      Validators.maxLength(500)
-    ]],
-    price: [0, [
-      Validators.required,
-      Validators.min(0)
-    ]],
-    stock: [0, [
-      Validators.required,
-      Validators.min(0)
     ]],
 
-    categoriaId: [null, [
+    stock: [null as number | null, [
       Validators.required
     ]],
 
-    marcaId: [null, [
+    categoria_id: [null as number | null, [
       Validators.required
-    ]]
+    ]],
+
+    marca_id: [null as number | null, [
+      Validators.required
+    ]],
+
+    url_imagen: [''],
+
+    estado: ['', [
+      Validators.required
+    ]],
+
+
 
   });
 
 
-  // Datos temporales.
-  // Después los reemplazamos por la API.
+  guardarProducto() {
+    if (!this.formProducto.invalid) {
+      const producto: any = this.formProducto.value;
 
-  categorias = [
-    {
-      id: 1,
-      name: 'Herramientas'
-    },
-    {
-      id: 2,
-      name: 'Materiales eléctricos'
-    },
-    {
-      id: 3,
-      name: 'Plomería'
-    }
-  ];
+      this.productosService.guardarProducto(producto).subscribe(
+        (data) => {
+          alert('producto guardado con éxito');
+          this.formProducto.reset();
 
 
-  marcas = [
-    {
-      id: 1,
-      name: 'Bosch'
-    },
-    {
-      id: 2,
-      name: 'Dewalt'
-    },
-    {
-      id: 3,
-      name: 'Makita'
-    }
-  ];
-
-
-  ngOnInit(): void {
-
-    this.productoId =
-      this.route.snapshot.paramMap.get('id');
-
-    this.isEditMode = !!this.productoId;
-
-    if (this.isEditMode) {
-
-      // Después conectamos esto con tu API.
-
+        }
+      )
     }
   }
 
+  categorias = []
+  marcas = []
 
-  onSave(): void {
+  cargarCategorias() {
+    this.categoriasService.obtenerCategorias().subscribe(
+      (categorias) => {
+        this.categorias = categorias;
+      }
+    )
+  }
 
-    if (this.form.invalid) {
-
-      this.form.markAllAsTouched();
-
-      return;
-    }
-
-    console.log(
-      'Datos del producto:',
-      this.form.value
-    );
-
-    this.router.navigate(['/admin/lista-productos']);
+  cargarMarcas() {
+    this.marcasService.obtenerMarcas().subscribe(
+      (marcas) => {
+        this.marcas = marcas;
+      }
+    )
+  }
+  ngOnInit(): void {
+    this.cargarCategorias();
+    this.cargarMarcas();
   }
 
 }

@@ -1,136 +1,149 @@
 <div class="flex-1 overflow-y-auto p-4 md:p-8 scroll-smooth">
+
   <div class="max-w-7xl mx-auto flex flex-col gap-4">
 
-    <!-- Header -->
+    <!-- header -->
     <div class="flex flex-col md:flex-row md:items-end justify-between gap-3">
       <div>
         <h1 class="text-3xl font-bold text-slate-900">
-          {{ isEditMode
-          ? 'Editar producto'
-          : 'Crear nuevo producto' }}
+          {{ isEditMode ? 'Editar producto' : 'Crear nueva producto' }}
         </h1>
+
         <p class="text-slate-600">
           {{ isEditMode
-          ? 'Modifica los datos del producto seleccionado.'
-          : 'Agrega un nuevo producto al inventario.' }}
+          ? 'Modifica los datos de la producto seleccionada.'
+          : 'Agrega una nueva producto de productos al inventario.' }}
         </p>
       </div>
 
       <div class="flex gap-4">
         <p-button label="Cancelar" [raised]="true" severity="secondary" [routerLink]="['/admin/lista-productos']" />
         <p-button label="Guardar Producto" [raised]="true" severity="primary" icon="pi pi-save"
-          [disabled]="form.invalid" (onClick)="onSave()" />
+          [disabled]="formProducto.invalid" (onClick)="guardarProducto()" />
       </div>
     </div>
 
     <!-- Formulario -->
-    <form [formGroup]="form" class="grid grid-cols-1 gap-5 lg:grid-cols-3">
+    <form [formGroup]="formProducto" class="grid grid-cols-1 gap-5">
       <!-- Información general -->
-      <section class="lg:col-span-2 bg-surface-100 p-6 rounded-xl
+      <section class="bg-surface-100 p-6 rounded-xl
                border border-surface-300 shadow-sm">
         <h3 class="text-lg font-bold mb-4">
           <span class="pi pi-info-circle text-blue-600 mr-1"></span>
           Información General
         </h3>
 
+
+
         <div class="grid grid-cols-1 gap-4">
           <!-- Nombre -->
           <div>
             <label class="block text-sm font-medium text-gray-600 mb-1">
-              Nombre del Producto
+              Nombre de la Producto
             </label>
-            <input pInputText type="text" formControlName="name" placeholder="Ej: Taladro Bosch 500W" class="w-full" />
 
+            <input pInputText type="text" formControlName="nombre" placeholder="Ej: Bosch, Dewalt, Makita"
+              class="w-full" />
             @if (
-            form.get('name')?.invalid &&
-            form.get('name')?.touched
+            formProducto.get('nombre')?.invalid &&
+            formProducto.get('nombre')?.touched
             ) {
             <small class="text-red-600">
-              El nombre debe tener entre 3 y 100 caracteres.
+              El nombre de la producto debe tener entre 3 y 50 caracteres.
             </small>
             }
+
+            <label class="block text-sm font-medium text-gray-600 mb-1">
+              Código
+            </label>
+
+            <input pInputText type="number" formControlName="codigo" placeholder="Ej: 1001" class="w-full" />
           </div>
 
-          <!-- Descripción -->
+          <div>
+            <label class="block text-sm font-medium text-gray-600 mb-1">
+              Modelo
+            </label>
+            <input pInputText type="text" formControlName="modelo" placeholder="Ej: GSB 1200" class="w-full" />
+          </div>
+
+          <div>
+            <label class="block text-sm font-medium text-gray-600 mb-1">
+              Color
+            </label>
+            <input pInputText type="text" formControlName="color" placeholder="Ej: Azul" class="w-full" />
+          </div>
+
           <div>
             <label class="block text-sm font-medium text-gray-600 mb-1">
               Descripción
             </label>
-            <textarea pTextarea formControlName="description" rows="5" class="w-full"
-              placeholder="Describe el producto"></textarea>
 
-            @if (
-            form.get('description')?.invalid &&
-            form.get('description')?.touched
-            ) {
-            <small class="text-red-600">
-              La descripción es obligatoria.
-            </small>
-            }
+            <textarea pTextarea formControlName="descripcion" placeholder="Descripción del producto" class="w-full"
+              rows="4"></textarea>
           </div>
 
-          <!-- Precio y Stock -->
-          <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
-            <!-- Precio -->
-            <div>
-              <label class="block text-sm font-medium text-gray-600 mb-1">
-                Precio
-              </label>
-              <p-inputNumber formControlName="price" mode="currency" currency="ARS" locale="es-AR" [min]="0"
-                class="w-full" />
-            </div>
+          <div>
+            <label class="block text-sm font-medium text-gray-600 mb-1">
+              Precio
+            </label>
 
-            <!-- Stock -->
-            <div>
-              <label class="block text-sm font-medium text-gray-600 mb-1">
-                Stock
-              </label>
-              <p-inputNumber formControlName="stock" [min]="0" [showButtons]="true" class="w-full" />
-            </div>
+            <input pInputText type="number" formControlName="precio" placeholder="Ej: 15000" class="w-full" />
           </div>
-        </div>
-      </section>
 
-      <!-- Organización -->
-      <section class="bg-surface-100 p-6 rounded-xl
-               border border-surface-300 shadow-sm">
-        <h3 class="text-lg font-bold mb-4">
-          <span class="pi pi-sitemap text-blue-600 mr-1"></span>
-          Organización
-        </h3>
+          <div>
+            <label class="block text-sm font-medium text-gray-600 mb-1">
+              Stock
+            </label>
 
-        <div class="grid grid-cols-1 gap-4">
-          <!-- Categoría -->
+            <input pInputText type="number" formControlName="stock" placeholder="Ej: 20" class="w-full" />
+          </div>
+
           <div>
             <label class="block text-sm font-medium text-gray-600 mb-1">
               Categoría
             </label>
-            <p-select formControlName="categoriaId" [options]="categorias" optionLabel="name" optionValue="id"
+
+            <p-select [options]="categorias" formControlName="categoria_id" optionLabel="nombre" optionValue="id"
               placeholder="Selecciona una categoría" class="w-full" appendTo="body" />
           </div>
 
-          <!-- Marca -->
           <div>
             <label class="block text-sm font-medium text-gray-600 mb-1">
               Marca
             </label>
-            <p-select formControlName="marcaId" [options]="marcas" optionLabel="name" optionValue="id"
+
+            <p-select [options]="marcas" formControlName="marca_id" optionLabel="nombre" optionValue="id"
               placeholder="Selecciona una marca" class="w-full" appendTo="body" />
+          </div>
+
+          <div>
+            <label class="block text-sm font-medium text-gray-600 mb-1">
+              URL de la imagen
+            </label>
+
+            <input pInputText type="text" formControlName="url_imagen" placeholder="https://..." class="w-full" />
+          </div>
+
+          <div>
+            <label class="block text-sm font-medium text-gray-600 mb-1">
+              Estado
+            </label>
+
+            <input pInputText type="text" formControlName="estado" placeholder="Estado del producto" class="w-full" />
           </div>
         </div>
       </section>
     </form>
 
-
     <!-- Debug -->
 
     @if (showDebug) {
     <div class="mt-6 p-4 bg-surface-100 rounded-lg text-xs">
-      <pre>{{ form.value | json }}</pre>
-      <pre>
-Formulario es Valido: {{ form.valid | json }}
-        </pre>
+      <pre>{{ formProducto.value | json }}</pre>
+      <pre>Formulario es Valido: {{ formProducto.valid | json }}</pre>
     </div>
     }
+
   </div>
 </div>
