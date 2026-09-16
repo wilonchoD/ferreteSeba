@@ -12,7 +12,9 @@ import { Button } from 'primeng/button';
 import { InputTextModule } from 'primeng/inputtext';
 import { TextareaModule } from 'primeng/textarea';
 import { MarcasService } from '../marca.service';
+import { Marcas } from '../../../../core/models/marca.model';
 import { SelectModule } from 'primeng/select';
+import { MessageService } from 'primeng/api';
 
 @Component({
   selector: 'app-form-marcas',
@@ -29,6 +31,9 @@ import { SelectModule } from 'primeng/select';
     SelectModule,
 
   ],
+  providers: [
+    MessageService,
+  ],
 
   templateUrl: './form-marca.html',
   styles: ``
@@ -38,9 +43,8 @@ export class FormMarca {
   private route = inject(ActivatedRoute);
   private router = inject(Router);
   private marcasService = inject(MarcasService);
+  private toastService = inject(MessageService);
 
-  isEditMode = false;
-  marcaId: string | null = null;
 
   showDebug: boolean = true;
 
@@ -51,23 +55,44 @@ export class FormMarca {
       Validators.maxLength(10)]],
   });
 
-
-
-
-
-  guardarMarca() {
-    if (!this.formMarca.invalid) {
-      const marca: any = this.formMarca.value;
-
-      this.marcasService.guardarMarca(marca).subscribe(
-        (data) => {
-          alert('marca guardada con éxito');
-          this.formMarca.reset();
-
-
-        }
-      )
+  ngOnInit() {
+    if (this.marcasService.marcaEditar() != null) {
+      this.formMarca.patchValue({
+        nombre: this.marcasService.marcaEditar()?.nombre,
+      })
+    } else {
+      this.formMarca.reset();
     }
   }
 
+  guardarMarca() {
+    if (!this.formMarca.invalid) {
+      let marca: Marcas = {
+        nombre: this.formMarca.value.nombre!,
+      }
+
+
+
+      if (this.marcasService.marcaEditar() == null) {
+        this.marcasService.guardarMarca(marca).subscribe(
+          (data) => {
+            this.toastService.add({ severity: 'success', summary: data.message });
+            this.finalizarGuardado();
+          }
+        )
+      } else {
+
+        this.marcasService.actualizarMarca(marca, this.marcasService.marcaEditar()?.id!).subscribe(
+          (data) => {
+            this.toastService.add({ severity: 'success', summary: data.message });
+            this.finalizarGuardado();
+          }
+        )
+      }
+    }
+  }
+  finalizarGuardado() {
+    this.formMarca.reset();
+    this.router.navigate(['/admin/lista-marcas'])
+  }
 }

@@ -5,67 +5,59 @@
     <!-- header -->
     <div class="flex flex-col md:flex-row md:items-end justify-between gap-3">
       <div>
-        <h1 class="text-3xl font-bold text-slate-900">
-          {{ isEditMode ? 'Editar marca' : 'Crear nueva marca' }}
-        </h1>
-
-        <p class="text-slate-600">
-          {{ isEditMode
-          ? 'Modifica los datos de la marca seleccionada.'
-          : 'Agrega una nueva marca de productos al inventario.' }}
-        </p>
+        <h1 class="text-3xl font-bold text-slate-900">Crear nueva marca</h1>
+        <p class="text-slate-600">Agrega nuevas marcas de productos al inventario</p>
       </div>
-
       <div class="flex gap-4">
         <p-button label="Cancelar" [raised]="true" severity="secondary" [routerLink]="['/admin/lista-marcas']" />
-        <p-button label="Guardar Marca" [raised]="true" severity="primary" icon="pi pi-save" [disabled]="formMarca.invalid"
+        <p-button label="Guardar Marca" [raised]="true" severity="primary" icon="pi pi-save"
           (onClick)="guardarMarca()" />
       </div>
     </div>
-
-    <!-- Formulario -->
-    <form [formGroup]="formMarca" class="grid grid-cols-1 gap-5">
-      <!-- Información general -->
-      <section class="bg-surface-100 p-6 rounded-xl
-               border border-surface-300 shadow-sm">
-        <h3 class="text-lg font-bold mb-4">
-          <span class="pi pi-info-circle text-blue-600 mr-1"></span>
-          Información General
-        </h3>
-
-
-
-        <div class="grid grid-cols-1 gap-4">
-          <!-- Nombre -->
-          <div>
-            <label class="block text-sm font-medium text-gray-600 mb-1">
-              Nombre de la Marca
-            </label>
-
-            <input pInputText type="text" formControlName="nombre" placeholder="Ej: Bosch, Dewalt, Makita"
-              class="w-full" />
-            @if (
-            formMarca.get('nombre')?.invalid &&
-            formMarca.get('nombre')?.touched
-            ) {
-            <small class="text-red-600">
-              El nombre de la marca debe tener entre 3 y 50 caracteres.
-            </small>
-            }
-
-          </div>
-          </div>
-      </section>
-    </form>
-  
-    <!-- Debug -->
-
-    @if (showDebug) {
-    <div class="mt-6 p-4 bg-surface-100 rounded-lg text-xs">
-      <pre>{{ formMarca.value | json }}</pre>
-      <pre>Formulario es Valido: {{ formMarca.valid | json }}</pre>
-    </div>
-    }
-
   </div>
+
+  <!-- Formulario -->
+  <form [formGroup]="formMarca" class="grid grid-cols-1 gap-5">
+    <!-- Información general -->
+    <section class="bg-surface-100 p-6 rounded-xl
+               border border-surface-300 shadow-sm">
+      <h3 class="text-lg font-bold mb-4">
+        <span class="pi pi-info-circle text-blue-600 mr-1"></span>
+        Información General
+      </h3>
+
+
+
+      <div class="grid grid-cols-1 gap-4">
+        <!-- Nombre -->
+        <div>
+          <label class="block text-sm font-medium text-gray-600 mb-1">
+            Nombre de la Marca
+          </label>
+
+          <input pInputText type="text" formControlName="nombre" placeholder="Ej: Bosch, Dewalt, Makita"
+            class="w-full" />
+          @if (
+          formMarca.get('nombre')?.invalid &&
+          formMarca.get('nombre')?.touched
+          ) {
+          <small class="text-red-600">
+            El nombre de la marca debe tener entre 3 y 50 caracteres.
+          </small>
+          }
+
+        </div>
+      </div>
+    </section>
+  </form>
+
+  <!-- Debug -->
+
+  @if (showDebug) {
+  <div class="mt-6 p-4 bg-surface-100 rounded-lg text-xs">
+    <pre>{{ formMarca.value | json }}</pre>
+    <pre>Formulario es Valido: {{ formMarca.valid | json }}</pre>
+  </div>
+  }
+
 </div>

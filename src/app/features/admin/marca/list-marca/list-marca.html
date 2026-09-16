@@ -7,7 +7,7 @@
                 <p class="text-gray-600">Administra la organización de tus productos por marcas</p>
             </div>
             <p-button label="Añadir Marca" [raised]="true" severity="primary" icon="pi pi-plus"
-                [routerLink]="['/admin/form-marca']" />
+                (onClick)="nuevaMarca()"/>
         </div>
 
         <app-filtro-marcas></app-filtro-marcas>
@@ -30,15 +30,16 @@
                         <td>
                             <div class="flex flex-row">
                                 <p-button icon="pi pi-pencil" [rounded]="true" [text]="true" [raised]="true"
-                                    severity="secondary" class="mr-4" />
-                                <p-button icon="pi pi-trash" [rounded]="true" severity="danger" />
+                                    severity="secondary" class="mr-4" (onClick)="editarMarca(marca)" />
+                                <p-button icon="pi pi-trash" [rounded]="true" severity="danger"
+                                    (onClick)="eliminarMarca(marca.id)" />
                             </div>
                         </td>
                     </tr>
                 </ng-template>
                 <ng-template #footer>
                     <tr>
-                        <td colspan="6">En total son {{ marcas() ? marcas().length : 0 }} marcas.</td>
+                        <td colspan="2">En total son {{ marcas() ? marcas().length : 0 }} marcas.</td>
                     </tr>
                 </ng-template>
             </p-table>
@@ -47,3 +48,5 @@
 
     </div>
 </div>
+<p-confirmdialog/>
+<p-toast />
