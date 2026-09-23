@@ -37,7 +37,7 @@ import { MessageService } from 'primeng/api';
 export class FormCategoria {
   private fb = inject(FormBuilder);
   private router = inject(Router);
-  private categoriaService = inject(CategoriasService);
+  private categoriasService = inject(CategoriasService);
   private toastService = inject(MessageService);
 
   protected categoriasPadre = signal<Categoria[]>([]);
@@ -60,10 +60,10 @@ export class FormCategoria {
   ngOnInit() {
     this.obtenerCategoriasPadre();
 
-    if (this.categoriaService.categoriaEditar() != null) {
+    if (this.categoriasService.categoriaEditar() != null) {
       this.formCategoria.patchValue({
-        nombre: this.categoriaService.categoriaEditar()?.nombre,
-        parent_id: this.categoriaService.categoriaEditar()?.parent_id!
+        nombre: this.categoriasService.categoriaEditar()?.nombre,
+        parent_id: this.categoriasService.categoriaEditar()?.parent_id!
       })
     } else {
       this.formCategoria.reset();
@@ -71,7 +71,7 @@ export class FormCategoria {
   }
 
   obtenerCategoriasPadre() {
-    this.categoriaService.obtenerCategoriasParaParents().subscribe(
+    this.categoriasService.obtenerCategoriasParaParents().subscribe(
       (data) => {
         this.categoriasPadre.set(data);
       }
@@ -87,8 +87,8 @@ export class FormCategoria {
 
 
 
-      if (this.categoriaService.categoriaEditar() == null) {
-        this.categoriaService.guardarCategoria(categoria).subscribe(
+      if (this.categoriasService.categoriaEditar() == null) {
+        this.categoriasService.guardarCategoria(categoria).subscribe(
           (data) => {
             this.toastService.add({ severity: 'success', summary: data.message });
             this.finalizarGuardado();
@@ -96,7 +96,7 @@ export class FormCategoria {
         )
       } else {
 
-        this.categoriaService.actualizarCategoria(categoria, this.categoriaService.categoriaEditar()?.id!).subscribe(
+        this.categoriasService.actualizarCategoria(categoria, this.categoriasService.categoriaEditar()?.id!).subscribe(
           (data) => {
             this.toastService.add({ severity: 'success', summary: data.message });
             this.finalizarGuardado();

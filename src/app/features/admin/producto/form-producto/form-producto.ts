@@ -2,12 +2,7 @@ import { Component, inject, OnInit } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { FormsModule, RequiredValidator } from '@angular/forms';
 import { FormBuilder, ReactiveFormsModule, Validators } from '@angular/forms';
-import {
-  ActivatedRoute,
-  Router,
-  RouterLink
-} from '@angular/router';
-
+import { ActivatedRoute, Router, RouterLink } from '@angular/router';
 import { Button } from 'primeng/button';
 import { InputTextModule } from 'primeng/inputtext';
 import { TextareaModule } from 'primeng/textarea';
@@ -15,6 +10,7 @@ import { ProductosService } from '../producto.service';
 import { CategoriasService } from '../../categorias/categorias.service';
 import { MarcasService } from '../../marca/marca.service';
 import { SelectModule } from 'primeng/select';
+import { MessageService } from 'primeng/api';
 
 @Component({
   selector: 'app-form-productos',

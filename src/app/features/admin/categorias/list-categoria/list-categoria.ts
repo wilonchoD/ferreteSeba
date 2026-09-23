@@ -14,11 +14,7 @@ import { ConfirmDialogModule } from 'primeng/confirmdialog';
 
 @Component({
   selector: 'app-lista-categorias',
-  imports: [ButtonModule, TableModule, SkeletonModule, TagModule, FiltroCategorias, ConfirmDialogModule],
-  providers: [
-    ConfirmationService,
-    MessageService
-  ],
+  imports: [ButtonModule, TableModule, SkeletonModule, TagModule, FiltroCategorias],
   templateUrl: './list-categoria.html',
   styles: ``,
 })

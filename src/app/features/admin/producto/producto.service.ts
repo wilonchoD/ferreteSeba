@@ -13,10 +13,9 @@ export class ProductosService {
   private _producto_editar = signal<Producto | null>(null);
   productoEditar = this._producto_editar.asReadonly();
 
-  setProductoEditar(producto: Producto) {
+  setProductoEditar(producto: Producto | null) {
     this._producto_editar.set(producto);
   }
-
 
   obtenerProducto() {
     return this.httpClient.get<any>(this.apiURL);
@@ -24,6 +23,14 @@ export class ProductosService {
 
   guardarProducto(producto: Producto) {
     return this.httpClient.post<any>(this.apiURL, producto);
+  }
+
+  actualizarProducto(producto: Producto, id_producto: number){
+    return this.httpClient.put<any>(`${this.apiURL}/${id_producto}`, producto)
+  }
+
+  eliminarProducto(id_producto: number){
+    return this.httpClient.delete<any>(`${this.apiURL}/${id_producto}`);
   }
 
 

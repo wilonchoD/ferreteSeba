@@ -7,7 +7,7 @@
                 <p class="text-gray-600">Administra la organización de tus productos</p>
             </div>
             <p-button label="Añadir producto" [raised]="true" severity="primary" icon="pi pi-plus"
-                [routerLink]="['/admin/form-producto']" />
+                (onClick)="nuevoProducto()" />
         </div>
 
         <app-filtro-productos></app-filtro-productos>
@@ -18,7 +18,13 @@
                 <ng-template #header>
                     <tr>
                         <th>productos</th>
-                        <th></th>
+                        <th>codigo</th>
+                        <th>modelo</th>
+                        <th>color</th>
+                        <th>descripcion</th>
+                        <th>precio</th>
+                        <th>stock</th>
+                        <th>estado</th>
                         <th>Acciones</th>
                     </tr>
                 </ng-template>
@@ -27,12 +33,34 @@
                         <td class="font-semibold">
                             {{ producto.nombre }}
                         </td>
+                        <td class="font-semibold">
+                            {{ producto.codigo }}
+                        </td>
+                        <td class="font-semibold">
+                            {{ producto.modelo }}
+                        </td>
+                        <td class="font-semibold">
+                            {{ producto.color }}
+                        </td>
+                        <td class="font-semibold">
+                            {{ producto.descripcion }}
+                        </td>
+                        <td class="font-semibold">
+                            {{ producto.precio }}
+                        </td>
+                        <td class="font-semibold">
+                            {{ producto.stock }}
+                        </td>
+                        <td class="font-semibold">
+                            {{ producto.estado }}
+                        </td>
 
                         <td>
                             <div class="flex flex-row">
                                 <p-button icon="pi pi-pencil" [rounded]="true" [text]="true" [raised]="true"
-                                    severity="secondary" class="mr-4" />
-                                <p-button icon="pi pi-trash" [rounded]="true" severity="danger" />
+                                    severity="secondary" class="mr-4" (onclick)="editarProductos(producto)" />
+                                <p-button icon="pi pi-trash" [rounded]="true" severity="danger"
+                                    (onClick)="eliminarProducto(producto.id)" />
                             </div>
                         </td>
                     </tr>

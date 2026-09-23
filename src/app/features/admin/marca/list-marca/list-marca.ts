@@ -13,8 +13,7 @@ import { ToastModule } from 'primeng/toast';
 
 @Component({
   selector: 'app-lista-marcas',
-  imports: [ButtonModule, TableModule, SkeletonModule, TagModule, FiltroMarcas, ConfirmDialogModule, ToastModule],
-  providers: [ConfirmationService, MessageService],
+  imports: [ButtonModule, TableModule, SkeletonModule, TagModule, FiltroMarcas],
   templateUrl: './list-marca.html',
   styles: ``,
 })
