@@ -58,7 +58,7 @@
                         <td>
                             <div class="flex flex-row">
                                 <p-button icon="pi pi-pencil" [rounded]="true" [text]="true" [raised]="true"
-                                    severity="secondary" class="mr-4" (onclick)="editarProductos(producto)" />
+                                    severity="secondary" class="mr-4" (onClick)="editarProductos(producto)" />
                                 <p-button icon="pi pi-trash" [rounded]="true" severity="danger"
                                     (onClick)="eliminarProducto(producto.id)" />
                             </div>
@@ -67,7 +67,7 @@
                 </ng-template>
                 <ng-template #footer>
                     <tr>
-                        <td colspan="6">En total son {{ productos() ? productos().length : 0 }} productos.</td>
+                        <td colspan="9">En total son {{ productos() ? productos().length : 0 }} productos.</td>
                     </tr>
                 </ng-template>
             </p-table>
