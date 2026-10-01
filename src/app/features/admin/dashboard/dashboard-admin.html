@@ -1,0 +1,62 @@
+<div class="flex-1 overflow-y-auto p-4 md:p-8 scroll-smooth">
+    <div class="max-w-7xl mx-auto flex flex-col gap-4">
+        <div>
+            <h1 class="text-3xl font-bold">Dashboard</h1>
+            <p class="text-gray-700">resumen de la ferreteria</p>
+        </div>
+        <div class="grid grid-cols-1 sm:grid-cols-3 gap-4">
+            <p-card styleClass="shadow-sm">
+                <div class="flex items-center justify-between">
+                    <div>
+                        <p class="text-gray-500 text-sm">Categorías</p>
+                        @if (cargandoCategorias()) {
+                            <p-skeleton width="4rem" height="2.5rem" />
+                        } @else {
+                            <p class="text-4xl font-bold">{{ totalCategorias() }}</p>
+                        }
+                    </div>
+                    <i class="pi pi-tag text-4xl text-blue-500"></i>
+                </div>
+                <a routerLink="/admin/lista-categorias" class="text-sm text-blue-600 hover:underline mt-2 inline-block">
+                    Ver categorías
+                </a>
+            </p-card>
+            <p-card styleClass="shadow-sm">
+                <div class="flex items-center justify-between">
+                    <div>
+                        <p class="text-gray-500 text-sm">Marcas</p>
+                        @if (cargandoMarcas()) {
+                            <p-skeleton width="4rem" height="2.5rem" />
+                        } @else {
+                            <p class="text-4xl font-bold">{{ totalMarcas() }}</p>
+                        }
+                    </div>
+                    <i class="pi pi-bookmark text-4xl text-orange-500"></i>
+                </div>
+                <a routerLink="/admin/lista-marcas" class="text-sm text-blue-600 hover:underline mt-2 inline-block">
+                    Ver marcas
+                </a>
+            </p-card>
+            <p-card styleClass="shadow-sm">
+                <div class="flex items-center justify-between">
+                    <div>
+                        <p class="text-gray-500 text-sm">Productos</p>
+                        @if (cargandoProductos()) {
+                            <p-skeleton width="4rem" height="2.5rem" />
+                        } @else {
+                            <p class="text-4xl font-bold">{{ totalProductos() }}</p>
+                        }
+                    </div>
+                    <i class="pi pi-box text-4xl text-green-500"></i>
+                </div>
+                <a routerLink="/admin/lista-productos" class="text-sm text-blue-600 hover:underline mt-2 inline-block">
+                    Ver productos
+                </a>
+            </p-card>
+
+        </div>
+        @if (error()) {
+            <p class="text-red-600 text-sm">No se pudieron cargar los totales.</p>
+        }
+    </div>
+</div>

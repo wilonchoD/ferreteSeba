@@ -8,9 +8,15 @@ import { FormProducto } from './producto/form-producto/form-producto';
 
 import { ListaMarcas } from './marca/list-marca/list-marca';
 import { FormMarca } from './marca/form-marca/form-marca';
+import { DashboardAdmin } from './dashboard/dashboard-admin';
 
 export const adminRoutes: Routes = [
 
+  {
+    path: 'dashboard',
+    component: DashboardAdmin,
+    title: 'Dashboard'
+  },
 
   {
     path: 'lista-categorias',
@@ -69,12 +75,12 @@ export const adminRoutes: Routes = [
   {
     path: '',
     pathMatch: 'full',
-    redirectTo: 'lista-categorias'
+    redirectTo: 'dashboard'
   },
 
   {
     path: '**',
-    redirectTo: 'lista-categorias'
+    redirectTo: 'dashboard'
   }
 
 ];

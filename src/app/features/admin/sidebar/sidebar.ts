@@ -30,6 +30,12 @@ export class Sidebar implements OnInit {
     this.menuItems = [
 
       {
+        label: 'Dashboard',
+        icon: 'pi pi-home',
+        routerLink: '/admin/dashboard'
+      },
+
+      {
         label: 'Categorías',
         icon: 'pi pi-sitemap',
         routerLink: '/admin/lista-categorias'
