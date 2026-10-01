@@ -26,11 +26,11 @@ export class MarcasService {
     return this.httpClient.post<any>(this.apiURL, marca);
   }
 
-  actualizarMarca(marca: Marcas, id_marca: number){
+  actualizarMarca(marca: Marcas, id_marca: number) {
     return this.httpClient.put<any>(`${this.apiURL}/${id_marca}`, marca)
   }
 
-  eliminarMarca(id_marca: number){
+  eliminarMarca(id_marca: number) {
     return this.httpClient.delete<any>(`${this.apiURL}/${id_marca}`);
   }
 
