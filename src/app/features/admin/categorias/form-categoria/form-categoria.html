@@ -8,7 +8,7 @@
         <p class="text-slate-600">Agrega nuevas categorias de productos al inventario</p>
       </div>
       <div class="flex gap-4">
-        <p-button label="Cancelar" [raised]="true" severity="secondary" [routerLink]="['/admin/list-productos']" />
+        <p-button label="Cancelar" [raised]="true" severity="secondary" [routerLink]="['/admin/lista-categorias']" />
         <p-button label="Guardar Categoria" [raised]="true" severity="primary" icon="pi pi-save"
           (onClick)="guardarCategoria()" />
 
@@ -61,16 +61,16 @@
           Asignar categoría padre
         </h3>
 
-          <div class="grid lg:grid-cols-1 sm:grid-cols-2 gap-4">
-            <div>
-              <label class="block text-sm font-medium text-gray-600 mb-1">Categoria Padre</label>
-              <p-select [options]="categoriasPadre()" optionLabel="nombre" optionValue="id"
-                placeholder="Selecciona un categoria" class="w-full" appendTo="body" formControlName="parent_id"
-                [showClear]="true" />
+        <div class="grid lg:grid-cols-1 sm:grid-cols-2 gap-4">
+          <div>
+            <label class="block text-sm font-medium text-gray-600 mb-1">Categoria Padre</label>
+            <p-select [options]="categoriasPadre()" optionLabel="nombre" optionValue="id"
+              placeholder="Selecciona un categoria" class="w-full" appendTo="body" formControlName="parent_id"
+              [showClear]="true" />
 
 
-            </div>
           </div>
+        </div>
       </section>
     </form>
 

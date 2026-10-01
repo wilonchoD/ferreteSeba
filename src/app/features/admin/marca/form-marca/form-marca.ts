@@ -31,9 +31,6 @@ import { MessageService } from 'primeng/api';
     SelectModule,
 
   ],
-  providers: [
-    MessageService,
-  ],
 
   templateUrl: './form-marca.html',
   styles: ``
@@ -52,7 +49,7 @@ export class FormMarca {
     nombre: ['', [
       Validators.required,
       Validators.minLength(3),
-      Validators.maxLength(10)]],
+      Validators.maxLength(20)]],
   });
 
   ngOnInit() {
@@ -78,6 +75,13 @@ export class FormMarca {
           (data) => {
             this.toastService.add({ severity: 'success', summary: data.message });
             this.finalizarGuardado();
+          },
+          (err) => {
+            this.toastService.add({
+              severity: 'error',
+              summary: 'Error al guardar',
+              detail: err.error?.message ?? 'Ocurrió un error inesperado.',
+            });
           }
         )
       } else {
@@ -86,6 +90,13 @@ export class FormMarca {
           (data) => {
             this.toastService.add({ severity: 'success', summary: data.message });
             this.finalizarGuardado();
+          },
+          (err) => {
+            this.toastService.add({
+              severity: 'error',
+              summary: 'Error al actualizar',
+              detail: err.error?.message ?? 'Ocurrió un error inesperado.',
+            });
           }
         )
       }

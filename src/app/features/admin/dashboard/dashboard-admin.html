@@ -10,9 +10,9 @@
                     <div>
                         <p class="text-gray-500 text-sm">Categorías</p>
                         @if (cargandoCategorias()) {
-                            <p-skeleton width="4rem" height="2.5rem" />
+                        <p-skeleton width="4rem" height="2.5rem" />
                         } @else {
-                            <p class="text-4xl font-bold">{{ totalCategorias() }}</p>
+                        <p class="text-4xl font-bold">{{ totalCategorias() }}</p>
                         }
                     </div>
                     <i class="pi pi-tag text-4xl text-blue-500"></i>
@@ -26,9 +26,9 @@
                     <div>
                         <p class="text-gray-500 text-sm">Marcas</p>
                         @if (cargandoMarcas()) {
-                            <p-skeleton width="4rem" height="2.5rem" />
+                        <p-skeleton width="4rem" height="2.5rem" />
                         } @else {
-                            <p class="text-4xl font-bold">{{ totalMarcas() }}</p>
+                        <p class="text-4xl font-bold">{{ totalMarcas() }}</p>
                         }
                     </div>
                     <i class="pi pi-bookmark text-4xl text-orange-500"></i>
@@ -42,9 +42,9 @@
                     <div>
                         <p class="text-gray-500 text-sm">Productos</p>
                         @if (cargandoProductos()) {
-                            <p-skeleton width="4rem" height="2.5rem" />
+                        <p-skeleton width="4rem" height="2.5rem" />
                         } @else {
-                            <p class="text-4xl font-bold">{{ totalProductos() }}</p>
+                        <p class="text-4xl font-bold">{{ totalProductos() }}</p>
                         }
                     </div>
                     <i class="pi pi-box text-4xl text-green-500"></i>
@@ -56,7 +56,7 @@
 
         </div>
         @if (error()) {
-            <p class="text-red-600 text-sm">No se pudieron cargar los totales.</p>
+        <p class="text-red-600 text-sm">No se pudieron cargar los totales.</p>
         }
     </div>
 </div>

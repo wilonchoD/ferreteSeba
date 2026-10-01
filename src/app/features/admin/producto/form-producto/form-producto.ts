@@ -47,7 +47,7 @@ export class FormProducto {
 
   protected categorias = signal<Categoria[]>([]);
   protected marcas = signal<Marcas[]>([]);
-
+  protected estados = ['Activo', 'Inactivo'];
 
   showDebug: boolean = true;
 
@@ -55,7 +55,7 @@ export class FormProducto {
     nombre: ['', [
       Validators.required,
       Validators.minLength(3),
-      Validators.maxLength(10)]],
+      Validators.maxLength(50)]],
 
     codigo: [null as number | null, [
       Validators.required
@@ -80,10 +80,12 @@ export class FormProducto {
 
     precio: [null as number | null, [
       Validators.required,
+      Validators.min(0)
     ]],
 
     stock: [null as number | null, [
-      Validators.required
+      Validators.required,
+      Validators.min(0)
     ]],
 
     categoria_id: [null as number | null, [
@@ -147,6 +149,13 @@ export class FormProducto {
           (data) => {
             this.toastService.add({ severity: 'success', summary: data.message });
             this.finalizarGuardado();
+          },
+          (err) => {
+            this.toastService.add({
+              severity: 'error',
+              summary: 'Error al guardar',
+              detail: err.error?.message ?? 'Ocurrió un error inesperado.',
+            });
           }
         );
       } else {
@@ -154,6 +163,13 @@ export class FormProducto {
           (data) => {
             this.toastService.add({ severity: 'success', summary: data.message });
             this.finalizarGuardado();
+          },
+          (err) => {
+            this.toastService.add({
+              severity: 'error',
+              summary: 'Error al actualizar',
+              detail: err.error?.message ?? 'Ocurrió un error inesperado.',
+            });
           }
         );
       }
@@ -179,6 +195,6 @@ export class FormProducto {
 
   finalizarGuardado() {
     this.formProducto.reset();
-    this.router.navigate(['/admin/lista-producto']);
+    this.router.navigate(['/admin/lista-productos']);
   }
 }

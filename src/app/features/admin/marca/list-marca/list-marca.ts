@@ -8,8 +8,6 @@ import { FiltroMarcas } from './filtro-marca/filtro-marca';
 import { MarcasService } from '../../../admin/marca/marca.service';
 import { Marcas } from '../../../../core/models/marca.model';
 import { ConfirmationService, MessageService } from 'primeng/api';
-import { ConfirmDialogModule } from 'primeng/confirmdialog';
-import { ToastModule } from 'primeng/toast';
 
 @Component({
   selector: 'app-lista-marcas',
@@ -35,6 +33,13 @@ export class ListaMarcas {
       (data) => {
         console.log(data);
         this.marcas.set(data);
+      },
+      () => {
+        this.toastService.add({
+          severity: 'error',
+          summary: 'Error',
+          detail: 'No se pudieron cargar las marcas.',
+        });
       }
     )
   }
@@ -56,9 +61,16 @@ export class ListaMarcas {
       icon: 'pi pi-exclamation-triangle',
       accept: () => {
         this.marcasService.eliminarMarca(marca_id).subscribe(
-          (data) => {
+          () => {
             this.obtenerMarcas();
             this.toastService.add({ severity: 'success', summary: 'Marca eliminada' });
+          },
+          (err) => {
+            this.toastService.add({
+              severity: 'error',
+              summary: 'Error al eliminar',
+              detail: err.error?.message ?? 'No se pudo eliminar la marca.',
+            });
           }
         )
       }

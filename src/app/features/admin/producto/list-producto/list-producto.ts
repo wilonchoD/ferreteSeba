@@ -8,12 +8,9 @@ import { FiltroProductos } from './filtro-producto/filtro-producto';
 import { ProductosService } from '../../../admin/producto/producto.service';
 import { Producto } from '../../../../core/models/producto.model';
 import { ConfirmationService, MessageService } from 'primeng/api';
-import { ConfirmDialogModule } from 'primeng/confirmdialog';
-import { ToastModule } from 'primeng/toast';
-
 
 @Component({
-  selector: 'app-lista-producto',
+  selector: 'app-lista-productos',
   imports: [ButtonModule, TableModule, SkeletonModule, TagModule, FiltroProductos],
   templateUrl: './list-producto.html',
   styles: ``,
@@ -36,6 +33,13 @@ export class ListaProductos {
       (data) => {
         console.log(data);
         this.productos.set(data);
+      },
+      () => {
+        this.toastService.add({
+          severity: 'error',
+          summary: 'Error',
+          detail: 'No se pudieron cargar los productos.',
+        });
       }
     )
   }
@@ -57,9 +61,16 @@ export class ListaProductos {
       icon: 'pi pi-exclamation-triangle',
       accept: () => {
         this.productosService.eliminarProducto(producto_id).subscribe(
-          (data) => {
+          () => {
             this.obtenerProducto();
             this.toastService.add({ severity: 'success', summary: 'Producto eliminada' });
+          },
+          (err) => {
+            this.toastService.add({
+              severity: 'error',
+              summary: 'Error al eliminar',
+              detail: err.error?.message ?? 'No se pudo eliminar el producto.',
+            });
           }
         )
       }

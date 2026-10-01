@@ -8,15 +8,14 @@
         <p class="text-slate-600">Agrega nuevos productos al inventario</p>
       </div>
       <div class="flex gap-4">
-        <p-button label="Cancelar" [raised]="true" severity="secondary" [routerLink]="['/admin/list-productos']" />
+        <p-button label="Cancelar" [raised]="true" severity="secondary" [routerLink]="['/admin/lista-productos']" />
         <p-button label="Guardar Producto" [raised]="true" severity="primary" icon="pi pi-save"
           (onClick)="guardarProducto()" />
       </div>
     </div>
 
     <!-- Formulario -->
-    <form [formGroup]="formProducto" 
-    class="grid grid-cols-1 gap-5">
+    <form [formGroup]="formProducto" class="grid grid-cols-1 gap-5">
       <!-- Información general -->
       <section class="bg-surface-100 p-6 rounded-xl border border-surface-300 shadow-sm">
         <h3 class="text-lg font-bold mb-4">
@@ -33,7 +32,7 @@
               Nombre de la Producto
             </label>
 
-            <input pInputText type="text" formControlName="nombre" placeholder="Ej: Bosch, Dewalt, Makita"
+            <input pInputText type="text" formControlName="nombre" placeholder="Ej: destornillador, machete, martillo"
               class="w-full" />
             @if (
             formProducto.get('nombre')?.invalid &&
@@ -43,7 +42,8 @@
               El nombre de la producto debe tener entre 3 y 50 caracteres.
             </small>
             }
-
+          </div>
+          <div>
             <label class="block text-sm font-medium text-gray-600 mb-1">
               Código
             </label>
@@ -56,6 +56,9 @@
               Modelo
             </label>
             <input pInputText type="text" formControlName="modelo" placeholder="Ej: GSB 1200" class="w-full" />
+            @if (formProducto.get('codigo')?.invalid && formProducto.get('codigo')?.touched) {
+            <small class="text-red-600">El código es obligatorio.</small>
+            }
           </div>
 
           <div>
@@ -63,6 +66,9 @@
               Color
             </label>
             <input pInputText type="text" formControlName="color" placeholder="Ej: Azul" class="w-full" />
+            @if (formProducto.get('color')?.invalid && formProducto.get('color')?.touched) {
+            <small class="text-red-600">El color es obligatorio.</small>
+            }
           </div>
 
           <div>
@@ -72,6 +78,9 @@
 
             <textarea pTextarea formControlName="descripcion" placeholder="Descripción del producto" class="w-full"
               rows="4"></textarea>
+            @if (formProducto.get('descripcion')?.invalid && formProducto.get('descripcion')?.touched) {
+            <small class="text-red-600">La descripción es obligatoria.</small>
+            }
           </div>
 
           <div>
@@ -80,6 +89,9 @@
             </label>
 
             <input pInputText type="number" formControlName="precio" placeholder="Ej: 15000" class="w-full" />
+            @if (formProducto.get('precio')?.invalid && formProducto.get('precio')?.touched) {
+            <small class="text-red-600">El precio es obligatorio.</small>
+            }
           </div>
 
           <div>
@@ -88,6 +100,9 @@
             </label>
 
             <input pInputText type="number" formControlName="stock" placeholder="Ej: 20" class="w-full" />
+            @if (formProducto.get('stock')?.invalid && formProducto.get('stock')?.touched) {
+            <small class="text-red-600">El stock es obligatorio.</small>
+            }
           </div>
 
           <div>
@@ -97,6 +112,9 @@
 
             <p-select [options]="categorias()" formControlName="categoria_id" optionLabel="nombre" optionValue="id"
               placeholder="Selecciona una categoria" class="w-full" appendTo="body" />
+            @if (formProducto.get('categoria_id')?.invalid && formProducto.get('categoria_id')?.touched) {
+            <small class="text-red-600">La categoría es obligatoria.</small>
+            }
           </div>
 
           <div>
@@ -106,6 +124,9 @@
 
             <p-select [options]="marcas()" formControlName="marca_id" optionLabel="nombre" optionValue="id"
               placeholder="Selecciona una marca" class="w-full" appendTo="body" />
+            @if (formProducto.get('marca_id')?.invalid && formProducto.get('marca_id')?.touched) {
+            <small class="text-red-600">La marca es obligatoria.</small>
+            }
           </div>
 
           <div>
@@ -121,7 +142,11 @@
               Estado
             </label>
 
-            <input pInputText type="text" formControlName="estado" placeholder="Estado del producto" class="w-full" />
+            <p-select [options]="estados" formControlName="estado" placeholder="Selecciona un estado" class="w-full"
+              appendTo="body" />
+            @if (formProducto.get('estado')?.invalid && formProducto.get('estado')?.touched) {
+            <small class="text-red-600">El estado es obligatorio.</small>
+            }
           </div>
         </div>
       </section>

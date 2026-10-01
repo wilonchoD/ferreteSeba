@@ -2,7 +2,7 @@ import { Component, inject, OnInit, signal } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
 import { FormBuilder, ReactiveFormsModule, Validators } from '@angular/forms';
-import { ActivatedRoute, Router, RouterLink } from '@angular/router';
+import { Router, RouterLink } from '@angular/router';
 import { Button } from 'primeng/button';
 import { InputTextModule } from 'primeng/inputtext';
 import { TextareaModule } from 'primeng/textarea';
@@ -26,10 +26,6 @@ import { MessageService } from 'primeng/api';
     SelectModule,
 
   ],
-  providers:[
-    MessageService,
-    
-  ],
 
   templateUrl: './form-categoria.html',
   styles: ``
@@ -49,7 +45,7 @@ export class FormCategoria {
     nombre: ['', [
       Validators.required,
       Validators.minLength(3),
-      Validators.maxLength(10)]],
+      Validators.maxLength(50)]],
     parent_id: [null as number | null]
   });
 
@@ -74,6 +70,13 @@ export class FormCategoria {
     this.categoriasService.obtenerCategoriasParaParents().subscribe(
       (data) => {
         this.categoriasPadre.set(data);
+      },
+      () => {
+        this.toastService.add({
+          severity: 'error',
+          summary: 'Error',
+          detail: 'No se pudieron cargar las categorias padre.',
+        });
       }
     )
   }
@@ -92,6 +95,13 @@ export class FormCategoria {
           (data) => {
             this.toastService.add({ severity: 'success', summary: data.message });
             this.finalizarGuardado();
+          },
+          (err) => {
+            this.toastService.add({
+              severity: 'error',
+              summary: 'Error al guardar',
+              detail: err.error?.message ?? 'Ocurrió un error inesperado.',
+            });
           }
         )
       } else {
@@ -100,6 +110,13 @@ export class FormCategoria {
           (data) => {
             this.toastService.add({ severity: 'success', summary: data.message });
             this.finalizarGuardado();
+          },
+          (err) => {
+            this.toastService.add({
+              severity: 'error',
+              summary: 'Error al actualizar',
+              detail: err.error?.message ?? 'Ocurrió un error inesperado.',
+            });
           }
         )
       }
@@ -108,7 +125,7 @@ export class FormCategoria {
 
   finalizarGuardado() {
     this.formCategoria.reset();
-    this.router.navigate(['/admin/lista-categoria'])
+    this.router.navigate(['/admin/lista-categorias'])
   }
 
 }

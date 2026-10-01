@@ -8,8 +8,6 @@ import { FiltroCategorias } from './filtro-categorias/filtro-categorias';
 import { CategoriasService } from '../categorias.service';
 import { Categoria } from '../../../../core/models/categoria.model';
 import { ConfirmationService, MessageService } from 'primeng/api';
-import { ConfirmDialogModule } from 'primeng/confirmdialog';
-
 
 
 @Component({
@@ -36,6 +34,13 @@ export class ListaCategorias {
       (data) => {
 
         this.categorias.set(data);
+      },
+      () => {
+        this.toastService.add({
+          severity: 'error',
+          summary: 'Error',
+          detail: 'No se pudieron cargar las categorias.',
+        });
       }
     )
   }
@@ -57,9 +62,16 @@ export class ListaCategorias {
       icon: 'pi pi-exclamation-triangle',
       accept: () => {
         this.categoriasService.eliminarCategoria(categoria_id).subscribe(
-          (data) => {
+          () => {
             this.obtenerCategorias();
             this.toastService.add({ severity: 'success', summary: 'Categoria eliminada' });
+          },
+          (err) => {
+            this.toastService.add({
+              severity: 'error',
+              summary: 'Error al eliminar',
+              detail: err.error?.message ?? 'No se pudo eliminar la categoria.',
+            });
           }
         )
       }
